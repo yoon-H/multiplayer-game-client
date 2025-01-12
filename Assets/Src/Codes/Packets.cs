@@ -11,7 +11,7 @@ public class Packets
     public enum PacketType { Ping, Normal, Location = 3 }
     public enum HandlerIds {
         Init = 0,
-        LocationUpdate = 2 
+        LocationUpdate = 6 
     }
 
     public static void Serialize<T>(IBufferWriter<byte> writer, T data)
@@ -20,14 +20,8 @@ public class Packets
     }
 
     public static T Deserialize<T>(byte[] data) {
-        for (int i = 0; i < data.Length; i++)
-        {
-            Debug.Log(data[i]);
-        }
-        
         try {
             using (var stream = new MemoryStream(data)) {
-                Debug.Log("deserialize");
                 return ProtoBuf.Serializer.Deserialize<T>(stream);
             }
         } catch (Exception ex) {

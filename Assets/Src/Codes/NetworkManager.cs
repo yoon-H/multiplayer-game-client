@@ -24,13 +24,17 @@ public class NetworkManager : MonoBehaviour
     private byte[] receiveBuffer = new byte[4096];
     private List<byte> incompleteData = new List<byte>();
 
+    const string IP = "127.0.0.1";
+    const string PORT = "5555";
+    const string DEVICE_ID = "sparta";
+
     void Awake() {        
         instance = this;
         wait = new WaitForSecondsRealtime(5);
     }
     public void OnStartButtonClicked() {
-        string ip = ipInputField.text;
-        string port = portInputField.text;
+        string ip = IP;
+        string port = PORT;
 
         if (IsValidPort(port)) {
             int portNumber = int.Parse(port);
@@ -42,7 +46,9 @@ public class NetworkManager : MonoBehaviour
                     GameManager.instance.deviceId = GenerateUniqueID();
                 }
             }
-  
+
+            GameManager.instance.deviceId = DEVICE_ID;
+
             if (ConnectToServer(ip, portNumber)) {
                 StartGame();
             } else {
@@ -194,7 +200,6 @@ public class NetworkManager : MonoBehaviour
     }
 
     async System.Threading.Tasks.Task ReceivePacketsAsync() {
-        Debug.Log("ReceivePackets");
         while (tcpClient.Connected) {
             try {
                 int bytesRead = await stream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length);
