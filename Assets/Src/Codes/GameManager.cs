@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,12 +16,17 @@ public class GameManager : MonoBehaviour
     [Header("# Player Info")]
     public uint playerId;
     public string deviceId;
+    public string userId;
+    public string gameId;
 
     [Header("# Game Object")]
     public PoolManager pool;
+    public NetworkManager networkManager;
+    public RoomManager roomManager;
     public Player player;
     public GameObject hud;
     public GameObject GameStartUI;
+    public GameObject Lobby;
 
     void Awake() {
         instance = this;
@@ -29,11 +34,17 @@ public class GameManager : MonoBehaviour
         playerId = (uint)Random.Range(0, 4);
     }
 
+    public void MoveToLobby()
+    {
+        GameStartUI.SetActive(false);
+        Lobby.SetActive(true);
+    }
+
     public void GameStart() {
         player.deviceId = deviceId;
         player.gameObject.SetActive(true);
         hud.SetActive(true);
-        GameStartUI.SetActive(false);
+        Lobby.SetActive(false);
         isLive = true;
 
         AudioManager.instance.PlayBgm(true);

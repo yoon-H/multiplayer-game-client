@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Spawner : MonoBehaviour
@@ -18,10 +18,15 @@ public class Spawner : MonoBehaviour
         HashSet<string> newUsers = new HashSet<string>();
 
         foreach(LocationUpdate.UserLocation user in data.users) {
+
+            if (user.id == GameManager.instance.userId) continue;
+
             newUsers.Add(user.id);
 
             GameObject player = GameManager.instance.pool.Get(user);
             PlayerPrefab playerScript = player.GetComponent<PlayerPrefab>();
+
+            //Debug.Log($"Spawn/ user.id : {user.id},playerId : {user.playerId} , x : {user.x}, y : {user.y}");
             playerScript.UpdatePosition(user.x, user.y);
         }
 

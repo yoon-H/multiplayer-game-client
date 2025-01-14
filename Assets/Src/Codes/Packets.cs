@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using ProtoBuf;
 using System.IO;
 using System.Buffers;
@@ -11,7 +11,8 @@ public class Packets
     public enum PacketType { Ping, Normal, Location = 3 }
     public enum HandlerIds {
         Init = 0,
-        LocationUpdate = 2 
+        CreateGame = 4,
+        LocationUpdate = 6 
     }
 
     public static void Serialize<T>(IBufferWriter<byte> writer, T data)
@@ -20,14 +21,8 @@ public class Packets
     }
 
     public static T Deserialize<T>(byte[] data) {
-        for (int i = 0; i < data.Length; i++)
-        {
-            Debug.Log(data[i]);
-        }
-        
         try {
             using (var stream = new MemoryStream(data)) {
-                Debug.Log("deserialize");
                 return ProtoBuf.Serializer.Deserialize<T>(stream);
             }
         } catch (Exception ex) {
@@ -65,6 +60,14 @@ public class InitialPayload
     [ProtoMember(3, IsRequired = true)]
     public float latency { get; set; }
 }
+
+[ProtoContract]
+public class CreateGamePayload
+{
+    [ProtoMember(1)]
+    public long timeStamp { get; set; }
+}
+
 
 [ProtoContract]
 public class CommonPacket
@@ -135,4 +138,10 @@ public class InitialResponse
     public string userId;
     public float x;
     public float y;
+}
+
+public class CreateGameResponse
+{
+    public string gameId;
+    public string message;
 }
