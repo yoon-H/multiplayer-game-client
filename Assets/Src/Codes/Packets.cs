@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using ProtoBuf;
 using System.IO;
 using System.Buffers;
@@ -11,6 +11,7 @@ public class Packets
     public enum PacketType { Ping, Normal, Location = 3 }
     public enum HandlerIds {
         Init = 0,
+        CreateGame = 4,
         LocationUpdate = 6 
     }
 
@@ -59,6 +60,14 @@ public class InitialPayload
     [ProtoMember(3, IsRequired = true)]
     public float latency { get; set; }
 }
+
+[ProtoContract]
+public class CreateGamePayload
+{
+    [ProtoMember(1)]
+    public long timeStamp { get; set; }
+}
+
 
 [ProtoContract]
 public class CommonPacket
@@ -129,4 +138,10 @@ public class InitialResponse
     public string userId;
     public float x;
     public float y;
+}
+
+public class CreateGameResponse
+{
+    public string gameId;
+    public string message;
 }

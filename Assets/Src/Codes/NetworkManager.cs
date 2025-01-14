@@ -40,7 +40,7 @@ public class NetworkManager : MonoBehaviour
             int portNumber = int.Parse(port);
 
             if (deviceIdInputField.text != "") {
-                GameManager.instance.deviceId = deviceIdInputField.text;
+                GameManager.instance.deviceId = DEVICE_ID;
             } else {
                 if (GameManager.instance.deviceId == "") {
                     GameManager.instance.deviceId = GenerateUniqueID();
@@ -51,6 +51,7 @@ public class NetworkManager : MonoBehaviour
 
             if (ConnectToServer(ip, portNumber)) {
                 StartGame();
+                GameManager.instance.MoveToLobby();
             } else {
                 AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
                 StartCoroutine(NoticeRoutine(1));
@@ -93,6 +94,12 @@ public class NetworkManager : MonoBehaviour
 
     string GenerateUniqueID() {
         return System.Guid.NewGuid().ToString();
+    }
+
+    public void CreateGame()
+    {
+        // 게임 세션 제작 패킷 보내기
+        SendCreateGamePacket();
     }
 
     void StartGame()
@@ -148,7 +155,7 @@ public class NetworkManager : MonoBehaviour
         CommonPacket commonPacket = new CommonPacket
         {
             handlerId = handlerId,
-            userId = GameManager.instance.deviceId,
+            userId = GameManager.instance.userId,
             version = GameManager.instance.version,
             payload = payloadData,
         };
@@ -172,6 +179,8 @@ public class NetworkManager : MonoBehaviour
         stream.Write(packet, 0, packet.Length);
     }
 
+    #region request 패킷 모음 
+
     void SendInitialPacket() {
         InitialPayload initialPayload = new InitialPayload
         {
@@ -184,9 +193,28 @@ public class NetworkManager : MonoBehaviour
         SendPacket(initialPayload, (uint)Packets.HandlerIds.Init);
     }
 
+    void SendCreateGamePacket()
+    {
+        var now = DateTime.Now.ToLocalTime();
+        var span = (now - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());
+        int timestamp = (int)span.TotalSeconds;
+
+
+        CreateGamePayload createGamePayload = new CreateGamePayload
+        {
+            timeStamp = timestamp,
+        };
+
+        // handlerId는 0으로 가정
+        SendPacket(createGamePayload, (uint)Packets.HandlerIds.CreateGame);
+    }
+
+    #endregion
+
     public void SendLocationUpdatePacket(float x, float y) {
         LocationUpdatePayload locationUpdatePayload = new LocationUpdatePayload
         {
+            gameId = GameManager.instance.gameId,
             x = x,
             y = y,
         };
@@ -273,6 +301,11 @@ public class NetworkManager : MonoBehaviour
                 case Packets.HandlerIds.Init: 
                 {
                     Handler.InitialHandler(Packets.ParsePayload<InitialResponse>(response.data));
+                    break;
+                }
+                case Packets.HandlerIds.CreateGame:
+                {
+                    Handler.CreateGameHandler(Packets.ParsePayload<CreateGameResponse>(response.data));
                     break;
                 }
             }
