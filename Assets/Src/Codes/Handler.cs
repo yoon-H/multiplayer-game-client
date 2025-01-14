@@ -18,6 +18,7 @@ public class Handler
     {
         try
         {
+            GameManager.instance.gameId = res.gameId;
             GameManager.instance.roomManager.AddRoom(res.gameId);
         }
         catch (Exception e)

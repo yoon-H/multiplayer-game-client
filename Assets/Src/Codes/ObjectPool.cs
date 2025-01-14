@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    public List<GameObject> prefabList = new(); // ÇÁ¸®ÆÕ ¸®½ºÆ® µî·Ï << ÀÎ½ºÆÑÅÍ Ã¢¿¡¼­ °¡´É
-    private Dictionary<string, Queue<GameObject>> prefabPoolDict = new(); // µñ¼Å³Ê¸® µµ¼­°ü Å°°ªÀ» »ç¿ëÇØ¼­ ¿øÇÏ´Â µ¥ÀÌÅÍ¸¦ °¡Á®¿Â´Ù.
+    public List<GameObject> prefabList = new(); // // í”„ë¦¬íŒ¹ ë¦¬ìŠ¤íŠ¸ ë“±ë¡ << ì¸ìŠ¤íŒ©í„° ì°½ì—ì„œ ê°€ëŠ¥
+    private Dictionary<string, Queue<GameObject>> prefabPoolDict = new(); // ë”•ì…”ë„ˆë¦¬ ë„ì„œê´€ í‚¤ê°’ì„ ì‚¬ìš©í•´ì„œ ì›í•˜ëŠ” ë°ì´í„°ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 
     public GameObject Spawn(string nameKey, Vector2 position = default, Quaternion rotation = default, Transform parent = null)
     {
@@ -22,7 +22,7 @@ public class ObjectPool : MonoBehaviour
         return copy;
     }
 
-    public void DeSpawn(GameObject go) // µ¹·Á º¸³»±â
+    public void DeSpawn(GameObject go) // ëŒë ¤ ë³´ë‚´ê¸°
     {
         var nameKey = go.name;
         if (prefabPoolDict.ContainsKey(nameKey))

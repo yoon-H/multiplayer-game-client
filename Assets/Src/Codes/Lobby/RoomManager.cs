@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,27 +16,20 @@ public class RoomManager : MonoBehaviour
 
     public Room AddRoom(string gameId)
     {
-        Debug.Log($"Add Room : gameId : {gameId}");
         GameObject btn = Instantiate(roomBtnPrefab, lobbyViewContent.transform);
 
         if (!btn) return null;
-        Debug.Log($"Add Room : btn check");
+
         Room room = btn.GetComponent<Room>();
 
         if (!room) return null;
-        Debug.Log($"Add Room : roomcheck");
-        Debug.Log(room);
+
         room.SetId(gameId);
-        Debug.Log($"Add Room : idcheck");
+
         room.AddPlayer(GameManager.instance.deviceId);
 
-        Debug.Log($"Add Room : addplayer");
-
         rooms.Add(gameId, room);
-        Debug.Log($"Add Room : addrooms");
         roomBtns.Add(gameId, btn);
-
-        Debug.Log($"Add Room : addcheck");
 
         GameManager.instance.GameStart();
 
@@ -45,14 +38,14 @@ public class RoomManager : MonoBehaviour
 
     public void DeleteRoom(string gameId)
     {
-        // Room ¿ŒΩ∫≈œΩ∫ ªË¡¶
+        // Room ÏÇ≠Ï†ú
         rooms.Remove(gameId);
         GameObject btn = roomBtns[gameId];
 
-        // Room πˆ∆∞ ªË¡¶
+        // Room Î≤ÑÌäº ÏÇ≠Ï†ú
         roomBtns.Remove(gameId);
 
-        // ø¿∫Í¡ß∆Æ ªË¡¶
+        // Ïò§Î∏åÏ†ùÌä∏ ÏÇ≠Ï†ú
         Destroy(btn);
     }    
 }
