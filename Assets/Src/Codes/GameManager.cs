@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
 
     public void MoveToLobby()
     {
+        NetworkManager.instance.SendGetGameSessionsPacket();
+
         GameStartUI.SetActive(false);
         Lobby.SetActive(true);
     }
@@ -49,6 +51,9 @@ public class GameManager : MonoBehaviour
 
         // 다른 사용자들 맵에서 지우기
         pool.RemoveAll();
+
+        // 로비 새로 고침
+        NetworkManager.instance.SendGetGameSessionsPacket();
 
         player.gameObject.SetActive(false);
         hud.SetActive(false);

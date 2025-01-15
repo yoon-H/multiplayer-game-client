@@ -11,7 +11,9 @@ public class Packets
     public enum PacketType { Ping, Normal, Location = 3 }
     public enum HandlerIds {
         Init = 0,
+        GetGameSessions = 1,
         CreateGame = 4,
+        JoinGame = 5,
         LocationUpdate = 6,
         EndGame = 7,
     }
@@ -63,10 +65,27 @@ public class InitialPayload
 }
 
 [ProtoContract]
+public class GetGameSessionsPayload
+{
+    [ProtoMember(1)]
+    public long timeStamp { get; set; }
+}
+
+[ProtoContract]
 public class CreateGamePayload
 {
     [ProtoMember(1)]
     public long timeStamp { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public uint playerId { get; set; }
+}
+
+[ProtoContract]
+public class JoinGamePayload
+{
+    [ProtoMember(1)]
+    public string gameId { get; set; }
 
     [ProtoMember(2, IsRequired = true)]
     public uint playerId { get; set; }
@@ -162,7 +181,30 @@ public class InitialResponse
     public string userId;
 }
 
+[System.Serializable]
+public class GetGameSessionsResponse
+{
+    public List<GameInfo> gameInfos;
+    public string message;
+
+    [System.Serializable]
+    public class GameInfo
+    {
+        public string gameId;
+        public string state;
+    }
+}
+
 public class CreateGameResponse
+{
+    public string gameId;
+    public uint playerId;
+    public float x;
+    public float y;
+    public string message;
+}
+
+public class JoinGameResponse
 {
     public string gameId;
     public uint playerId;
