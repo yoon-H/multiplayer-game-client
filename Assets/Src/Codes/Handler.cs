@@ -26,4 +26,18 @@ public class Handler
             Debug.LogError($"Error CreateGameHandler: {e.Message}");
         }
     }
+
+    public static void EndGameHandler(CreateGameResponse res)
+    {
+        try
+        {
+            GameManager.instance.gameId = "";
+            
+            //TODO 방 상태 변경
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error CreateGameHandler: {e.Message}");
+        }
+    }
 }

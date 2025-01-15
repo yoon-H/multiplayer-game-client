@@ -12,7 +12,8 @@ public class Packets
     public enum HandlerIds {
         Init = 0,
         CreateGame = 4,
-        LocationUpdate = 6 
+        LocationUpdate = 6,
+        EndGame = 7,
     }
 
     public static void Serialize<T>(IBufferWriter<byte> writer, T data)
@@ -68,6 +69,21 @@ public class CreateGamePayload
     public long timeStamp { get; set; }
 }
 
+[ProtoContract]
+public class EndGamePayload
+{
+    [ProtoMember(1, IsRequired = true)]
+    public string gameId { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public float x { get; set; }
+
+    [ProtoMember(3, IsRequired = true)]
+    public float y { get; set; }
+
+    [ProtoMember(4, IsRequired = true)]
+    public uint score { get; set; }
+}
 
 [ProtoContract]
 public class CommonPacket
@@ -143,5 +159,12 @@ public class InitialResponse
 public class CreateGameResponse
 {
     public string gameId;
+    public string message;
+}
+
+public class EndGameResponse
+{
+    public string gameId;
+    public string state;
     public string message;
 }
