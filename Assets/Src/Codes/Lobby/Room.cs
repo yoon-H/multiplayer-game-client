@@ -33,24 +33,7 @@ public class Room : MonoBehaviour
 
     public void JoinGame()
     {
-        switch (state)
-        {
-            case RoomState.Waiting:
-                GameManager.instance.gameId = gameId;
-                GameManager.instance.GameStart();
-
-                players.Add(GameManager.instance.deviceId);
-                if(players.Count >=2)
-                {
-                    state = RoomState.InProgress;
-                    ChangeRoomColor();
-                }
-                break;
-            case RoomState.InProgress:
-                // TODO 게임 참가 실패 코드
-                break;
-        }
-        
+        NetworkManager.instance.SendJoinGamePacket(gameId);        
     }
 
     public bool CheckHasUpdate()

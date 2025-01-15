@@ -244,6 +244,17 @@ public class NetworkManager : MonoBehaviour
         SendPacket(createGamePayload, (uint)Packets.HandlerIds.CreateGame);
     }
 
+    public void SendJoinGamePacket(string gameId)
+    {
+        JoinGamePayload joinGamePayload = new JoinGamePayload
+        {
+            gameId = gameId,
+            playerId = GameManager.instance.playerId,
+        };
+
+        SendPacket(joinGamePayload, (uint)Packets.HandlerIds.JoinGame);
+    }
+
     public void SendEndGamePacket(float x, float y)
     {
         EndGamePayload endGamePayload = new EndGamePayload
@@ -374,6 +385,11 @@ public class NetworkManager : MonoBehaviour
                 case Packets.HandlerIds.GetGameSessions:
                     {
                         Handler.GetGameSessionsHandler(Packets.ParsePayload<GetGameSessionsResponse>(response.data));
+                        break;
+                    }
+                case Packets.HandlerIds.JoinGame:
+                    {
+                        Handler.JoinGameHandler(Packets.ParsePayload<JoinGameResponse>(response.data));
                         break;
                     }
             }

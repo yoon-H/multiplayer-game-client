@@ -32,14 +32,22 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        // 방이 삭제되었으면 오브젝트 삭제
+        List<string> idList = new List<string>();
+
+        // 방이 삭제되었으면 id 저장
         foreach (var item in rooms)
         {
             var id = item.Key;
             var room = item.Value;
 
             if (room.CheckHasUpdate()) room.SetHasUpdate(false);
-            else DeleteRoom(id);
+            else idList.Add(id);
+        }
+
+        // 삭제!
+        foreach (var id in idList)
+        {
+            DeleteRoom(id);
         }
 
     }

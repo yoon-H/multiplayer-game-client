@@ -28,6 +28,21 @@ public class Handler
         }
     }
 
+    public static void JoinGameHandler(JoinGameResponse res)
+    {
+        try
+        {
+            GameManager.instance.gameId = res.gameId;
+            GameManager.instance.playerId = res.playerId;
+            GameManager.instance.player.UpdatePositionFromServer(res.x, res.y);
+            GameManager.instance.GameStart();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error CreateGameHandler: {e.Message}");
+        }
+    }
+
     public static void EndGameHandler(EndGameResponse res)
     {
         try

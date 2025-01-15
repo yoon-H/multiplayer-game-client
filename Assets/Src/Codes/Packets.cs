@@ -13,6 +13,7 @@ public class Packets
         Init = 0,
         GetGameSessions = 1,
         CreateGame = 4,
+        JoinGame = 5,
         LocationUpdate = 6,
         EndGame = 7,
     }
@@ -75,6 +76,16 @@ public class CreateGamePayload
 {
     [ProtoMember(1)]
     public long timeStamp { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public uint playerId { get; set; }
+}
+
+[ProtoContract]
+public class JoinGamePayload
+{
+    [ProtoMember(1)]
+    public string gameId { get; set; }
 
     [ProtoMember(2, IsRequired = true)]
     public uint playerId { get; set; }
@@ -185,6 +196,15 @@ public class GetGameSessionsResponse
 }
 
 public class CreateGameResponse
+{
+    public string gameId;
+    public uint playerId;
+    public float x;
+    public float y;
+    public string message;
+}
+
+public class JoinGameResponse
 {
     public string gameId;
     public uint playerId;
