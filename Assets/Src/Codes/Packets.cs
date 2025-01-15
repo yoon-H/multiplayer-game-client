@@ -11,6 +11,7 @@ public class Packets
     public enum PacketType { Ping, Normal, Location = 3 }
     public enum HandlerIds {
         Init = 0,
+        GetGameSessions = 1,
         CreateGame = 4,
         LocationUpdate = 6,
         EndGame = 7,
@@ -60,6 +61,13 @@ public class InitialPayload
     
     [ProtoMember(3, IsRequired = true)]
     public float latency { get; set; }
+}
+
+[ProtoContract]
+public class GetGameSessionsPayload
+{
+    [ProtoMember(1)]
+    public long timeStamp { get; set; }
 }
 
 [ProtoContract]
@@ -160,6 +168,20 @@ public class Response {
 public class InitialResponse
 {
     public string userId;
+}
+
+[System.Serializable]
+public class GetGameSessionsResponse
+{
+    public List<GameInfo> gameInfos;
+    public string message;
+
+    [System.Serializable]
+    public class GameInfo
+    {
+        public string gameId;
+        public string state;
+    }
 }
 
 public class CreateGameResponse

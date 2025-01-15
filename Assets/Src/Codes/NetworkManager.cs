@@ -44,7 +44,7 @@ public class NetworkManager : MonoBehaviour
 
             if (deviceIdInputField.text != "")
             {
-                GameManager.instance.deviceId = DEVICE_ID;
+                GameManager.instance.deviceId = deviceIdInputField.text;
             }
             else
             {
@@ -54,7 +54,7 @@ public class NetworkManager : MonoBehaviour
                 }
             }
 
-            GameManager.instance.deviceId = DEVICE_ID;
+            //GameManager.instance.deviceId = deviceIdInputField.text;
 
             if (ConnectToServer(ip, portNumber))
             {
@@ -214,6 +214,20 @@ public class NetworkManager : MonoBehaviour
         SendPacket(initialPayload, (uint)Packets.HandlerIds.Init);
     }
 
+    public void SendGetGameSessionsPacket()
+    {
+        var now = DateTime.Now.ToLocalTime();
+        var span = (now - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime());
+        int timestamp = (int)span.TotalSeconds;
+
+        GetGameSessionsPayload getGameSessionsPayload = new GetGameSessionsPayload
+        {
+            timeStamp = timestamp,
+        };
+
+        SendPacket(getGameSessionsPayload, (uint)Packets.HandlerIds.GetGameSessions);
+    }
+
     void SendCreateGamePacket()
     {
         var now = DateTime.Now.ToLocalTime();
@@ -355,6 +369,11 @@ public class NetworkManager : MonoBehaviour
                 case Packets.HandlerIds.EndGame:
                     {
                         Handler.EndGameHandler(Packets.ParsePayload<EndGameResponse>(response.data));
+                        break;
+                    }
+                case Packets.HandlerIds.GetGameSessions:
+                    {
+                        Handler.GetGameSessionsHandler(Packets.ParsePayload<GetGameSessionsResponse>(response.data));
                         break;
                     }
             }

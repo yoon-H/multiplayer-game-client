@@ -38,7 +38,19 @@ public class Handler
         }
         catch (Exception e)
         {
-            Debug.LogError($"Error CreateGameHandler: {e.Message}");
+            Debug.LogError($"Error EndGameHandler: {e.Message}");
+        }
+    }
+
+    public static void GetGameSessionsHandler(GetGameSessionsResponse res)
+    {
+        try
+        {
+            GameManager.instance.roomManager.UpdateRooms(res.gameInfos);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error GetGameSessionsHandler: {e.Message}");
         }
     }
 }
