@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor.Rendering;
@@ -97,5 +97,16 @@ public class Player : MonoBehaviour
     {
         targetPosition = new Vector2(x, y);
         isTargetPositionSet = true;
+    }
+
+    public void ExitGame()
+    {
+        NetworkManager.instance.SendEndGamePacket(rigid.position.x, rigid.position.y);
+    }
+
+    private void OnApplicationQuit()
+    {
+        GameManager.instance.isLive = false;
+        ExitGame();
     }
 }

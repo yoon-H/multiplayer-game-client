@@ -224,10 +224,25 @@ public class NetworkManager : MonoBehaviour
         CreateGamePayload createGamePayload = new CreateGamePayload
         {
             timeStamp = timestamp,
+            playerId = GameManager.instance.playerId,
         };
 
         SendPacket(createGamePayload, (uint)Packets.HandlerIds.CreateGame);
     }
+
+    public void SendEndGamePacket(float x, float y)
+    {
+        EndGamePayload endGamePayload = new EndGamePayload
+        {
+            gameId = GameManager.instance.gameId,
+            x = x,
+            y = y,
+            score = GameManager.instance.score,
+            playerId = GameManager.instance.playerId,
+        };
+
+        SendPacket(endGamePayload, (uint)Packets.HandlerIds.EndGame);
+    }    
 
     #endregion
 
@@ -335,6 +350,11 @@ public class NetworkManager : MonoBehaviour
                 case Packets.HandlerIds.CreateGame:
                     {
                         Handler.CreateGameHandler(Packets.ParsePayload<CreateGameResponse>(response.data));
+                        break;
+                    }
+                case Packets.HandlerIds.EndGame:
+                    {
+                        Handler.EndGameHandler(Packets.ParsePayload<EndGameResponse>(response.data));
                         break;
                     }
             }

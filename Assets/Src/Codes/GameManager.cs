@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     public string deviceId;
     public string userId;
     public string gameId;
+    public uint score = 0;
 
     [Header("# Game Object")]
     public PoolManager pool;
@@ -38,6 +40,22 @@ public class GameManager : MonoBehaviour
     {
         GameStartUI.SetActive(false);
         Lobby.SetActive(true);
+    }
+
+    public void ReturnToLobby()
+    {
+        // 마지막 위치 보내기
+        player.ExitGame();
+
+        // 다른 사용자들 맵에서 지우기
+        pool.RemoveAll();
+
+        player.gameObject.SetActive(false);
+        hud.SetActive(false);
+        Lobby.SetActive(true);
+        isLive = false;
+
+        AudioManager.instance.PlayBgm(false);
     }
 
     public void GameStart() {
