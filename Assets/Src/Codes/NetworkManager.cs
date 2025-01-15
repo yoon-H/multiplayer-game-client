@@ -224,6 +224,7 @@ public class NetworkManager : MonoBehaviour
         CreateGamePayload createGamePayload = new CreateGamePayload
         {
             timeStamp = timestamp,
+            playerId = GameManager.instance.playerId,
         };
 
         SendPacket(createGamePayload, (uint)Packets.HandlerIds.CreateGame);
@@ -237,6 +238,7 @@ public class NetworkManager : MonoBehaviour
             x = x,
             y = y,
             score = GameManager.instance.score,
+            playerId = GameManager.instance.playerId,
         };
 
         SendPacket(endGamePayload, (uint)Packets.HandlerIds.EndGame);
@@ -352,7 +354,7 @@ public class NetworkManager : MonoBehaviour
                     }
                 case Packets.HandlerIds.EndGame:
                     {
-                        Handler.EndGameHandler(Packets.ParsePayload<CreateGameResponse>(response.data));
+                        Handler.EndGameHandler(Packets.ParsePayload<EndGameResponse>(response.data));
                         break;
                     }
             }

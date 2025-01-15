@@ -67,6 +67,9 @@ public class CreateGamePayload
 {
     [ProtoMember(1)]
     public long timeStamp { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public uint playerId { get; set; }
 }
 
 [ProtoContract]
@@ -83,6 +86,9 @@ public class EndGamePayload
 
     [ProtoMember(4, IsRequired = true)]
     public uint score { get; set; }
+
+    [ProtoMember(5, IsRequired = true)]
+    public uint playerId { get; set; }
 }
 
 [ProtoContract]
@@ -149,16 +155,19 @@ public class Response {
     public byte[] data { get; set; }
 }
 
+
+#region Response 모음
 public class InitialResponse
 {
     public string userId;
-    public float x;
-    public float y;
 }
 
 public class CreateGameResponse
 {
     public string gameId;
+    public uint playerId;
+    public float x;
+    public float y;
     public string message;
 }
 
@@ -168,3 +177,5 @@ public class EndGameResponse
     public string state;
     public string message;
 }
+
+#endregion

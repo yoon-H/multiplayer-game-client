@@ -7,7 +7,6 @@ public class Handler
         try 
         {
             GameManager.instance.userId = res.userId;
-            GameManager.instance.player.UpdatePositionFromServer(res.x, res.y);
         } catch(Exception e)
         {
             Debug.LogError($"Error InitialHandelr: {e.Message}");
@@ -19,6 +18,8 @@ public class Handler
         try
         {
             GameManager.instance.gameId = res.gameId;
+            GameManager.instance.playerId = res.playerId;
+            GameManager.instance.player.UpdatePositionFromServer(res.x, res.y);
             GameManager.instance.roomManager.AddRoom(res.gameId);
         }
         catch (Exception e)
@@ -27,7 +28,7 @@ public class Handler
         }
     }
 
-    public static void EndGameHandler(CreateGameResponse res)
+    public static void EndGameHandler(EndGameResponse res)
     {
         try
         {

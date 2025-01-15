@@ -103,4 +103,10 @@ public class Player : MonoBehaviour
     {
         NetworkManager.instance.SendEndGamePacket(rigid.position.x, rigid.position.y);
     }
+
+    private void OnApplicationQuit()
+    {
+        GameManager.instance.isLive = false;
+        ExitGame();
+    }
 }
