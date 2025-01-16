@@ -26,7 +26,6 @@ public class NetworkManager : MonoBehaviour
 
     const string IP = "127.0.0.1";
     const string PORT = "5555";
-    const string DEVICE_ID = "sparta";
 
     void Awake()
     {
@@ -122,7 +121,7 @@ public class NetworkManager : MonoBehaviour
     void StartGame()
     {
         // 게임 시작 코드 작성
-        Debug.Log("Game Started");
+        //Debug.Log("Game Started");
         StartReceiving(); // Start receiving data
         SendInitialPacket();
     }
@@ -355,7 +354,7 @@ public class NetworkManager : MonoBehaviour
     {
         // 패킷 데이터 처리
         var response = Packets.Deserialize<Response>(packetData);
-        Debug.Log($"HandlerId: {response.handlerId}, responseCode: {response.responseCode}, timestamp: {response.timestamp}");
+        //Debug.Log($"HandlerId: {response.handlerId}, responseCode: {response.responseCode}, timestamp: {response.timestamp}");
 
         if (response.responseCode != 0 && !uiNotice.activeSelf)
         {
@@ -405,7 +404,7 @@ public class NetworkManager : MonoBehaviour
         {
             // var specificData = Packets.Deserialize<SpecificDataType>(data);
             string jsonString = Encoding.UTF8.GetString(data);
-            Debug.Log($"Processed SpecificDataType: {jsonString}");
+            //Debug.Log($"Processed SpecificDataType: {jsonString}");
         }
         catch (Exception e)
         {
