@@ -19,7 +19,11 @@ public class Spawner : MonoBehaviour
 
         foreach(LocationUpdate.UserLocation user in data.users) {
 
-            if (user.id == GameManager.instance.userId) continue;
+            if (user.id == GameManager.instance.userId)
+            {
+                GameManager.instance.player.UpdatePositionFromServer(user.x, user.y);
+                continue;
+            }
 
             newUsers.Add(user.id);
 
