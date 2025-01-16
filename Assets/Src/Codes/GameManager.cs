@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,12 +17,18 @@ public class GameManager : MonoBehaviour
     [Header("# Player Info")]
     public uint playerId;
     public string deviceId;
+    public string userId;
+    public string gameId;
+    public uint score = 0;
 
     [Header("# Game Object")]
     public PoolManager pool;
+    public NetworkManager networkManager;
+    public RoomManager roomManager;
     public Player player;
     public GameObject hud;
     public GameObject GameStartUI;
+    public GameObject Lobby;
 
     void Awake() {
         instance = this;
@@ -29,11 +36,38 @@ public class GameManager : MonoBehaviour
         playerId = (uint)Random.Range(0, 4);
     }
 
+    public void MoveToLobby()
+    {
+        NetworkManager.instance.SendGetGameSessionsPacket();
+
+        GameStartUI.SetActive(false);
+        Lobby.SetActive(true);
+    }
+
+    public void ReturnToLobby()
+    {
+        // 마지막 위치 보내기
+        player.ExitGame();
+
+        // 다른 사용자들 맵에서 지우기
+        pool.RemoveAll();
+
+        // 로비 새로 고침
+        NetworkManager.instance.SendGetGameSessionsPacket();
+
+        player.gameObject.SetActive(false);
+        hud.SetActive(false);
+        Lobby.SetActive(true);
+        isLive = false;
+
+        AudioManager.instance.PlayBgm(false);
+    }
+
     public void GameStart() {
         player.deviceId = deviceId;
         player.gameObject.SetActive(true);
         hud.SetActive(true);
-        GameStartUI.SetActive(false);
+        Lobby.SetActive(false);
         isLive = true;
 
         AudioManager.instance.PlayBgm(true);

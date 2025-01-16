@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -56,5 +56,15 @@ public class PoolManager : MonoBehaviour
         } else {
             Debug.Log($"User {userId} not found in dictionary");
         }
+    }
+
+    public void RemoveAll()
+    {
+        foreach (GameObject item in pool)
+        {
+            item.SetActive(false);
+        }
+
+        userDictionary.Clear();
     }
 }

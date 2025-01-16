@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using ProtoBuf;
 using System.IO;
 using System.Buffers;
@@ -11,7 +11,11 @@ public class Packets
     public enum PacketType { Ping, Normal, Location = 3 }
     public enum HandlerIds {
         Init = 0,
-        LocationUpdate = 2 
+        GetGameSessions = 1,
+        CreateGame = 4,
+        JoinGame = 5,
+        LocationUpdate = 6,
+        EndGame = 7,
     }
 
     public static void Serialize<T>(IBufferWriter<byte> writer, T data)
@@ -20,14 +24,8 @@ public class Packets
     }
 
     public static T Deserialize<T>(byte[] data) {
-        for (int i = 0; i < data.Length; i++)
-        {
-            Debug.Log(data[i]);
-        }
-        
         try {
             using (var stream = new MemoryStream(data)) {
-                Debug.Log("deserialize");
                 return ProtoBuf.Serializer.Deserialize<T>(stream);
             }
         } catch (Exception ex) {
@@ -67,6 +65,58 @@ public class InitialPayload
 }
 
 [ProtoContract]
+public class GetGameSessionsPayload
+{
+    [ProtoMember(1)]
+    public long timeStamp { get; set; }
+}
+
+[ProtoContract]
+public class CreateGamePayload
+{
+    [ProtoMember(1)]
+    public long timeStamp { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public uint playerId { get; set; }
+
+    [ProtoMember(3, IsRequired = true)]
+    public float speed { get; set; }
+}
+
+[ProtoContract]
+public class JoinGamePayload
+{
+    [ProtoMember(1)]
+    public string gameId { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public uint playerId { get; set; }
+
+    [ProtoMember(3, IsRequired = true)]
+    public float speed { get; set; }
+}
+
+[ProtoContract]
+public class EndGamePayload
+{
+    [ProtoMember(1, IsRequired = true)]
+    public string gameId { get; set; }
+
+    [ProtoMember(2, IsRequired = true)]
+    public float x { get; set; }
+
+    [ProtoMember(3, IsRequired = true)]
+    public float y { get; set; }
+
+    [ProtoMember(4, IsRequired = true)]
+    public uint score { get; set; }
+
+    [ProtoMember(5, IsRequired = true)]
+    public uint playerId { get; set; }
+}
+
+[ProtoContract]
 public class CommonPacket
 {
     [ProtoMember(1)]
@@ -87,9 +137,10 @@ public class LocationUpdatePayload {
     [ProtoMember(1, IsRequired = true)]
     public string gameId { get; set; }
     [ProtoMember(2, IsRequired = true)]
-    public float x { get; set; }
+    public float dx { get; set; }
     [ProtoMember(3, IsRequired = true)]
-    public float y { get; set; }
+    public float dy { get; set; }
+
 }
 
 [ProtoContract]
@@ -130,9 +181,50 @@ public class Response {
     public byte[] data { get; set; }
 }
 
+
+#region Response 모음
 public class InitialResponse
 {
     public string userId;
+}
+
+[System.Serializable]
+public class GetGameSessionsResponse
+{
+    public List<GameInfo> gameInfos;
+    public string message;
+
+    [System.Serializable]
+    public class GameInfo
+    {
+        public string gameId;
+        public string state;
+    }
+}
+
+public class CreateGameResponse
+{
+    public string gameId;
+    public uint playerId;
     public float x;
     public float y;
+    public string message;
 }
+
+public class JoinGameResponse
+{
+    public string gameId;
+    public uint playerId;
+    public float x;
+    public float y;
+    public string message;
+}
+
+public class EndGameResponse
+{
+    public string gameId;
+    public string state;
+    public string message;
+}
+
+#endregion
