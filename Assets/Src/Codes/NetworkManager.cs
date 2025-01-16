@@ -24,7 +24,7 @@ public class NetworkManager : MonoBehaviour
     private byte[] receiveBuffer = new byte[4096];
     private List<byte> incompleteData = new List<byte>();
 
-    const string IP = "127.0.0.1";
+    const string IP = "3.39.226.189";
     const string PORT = "5555";
 
     void Awake()
@@ -53,8 +53,6 @@ public class NetworkManager : MonoBehaviour
                 }
             }
 
-            //GameManager.instance.deviceId = deviceIdInputField.text;
-
             if (ConnectToServer(ip, portNumber))
             {
                 StartGame();
@@ -62,14 +60,12 @@ public class NetworkManager : MonoBehaviour
             }
             else
             {
-                AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
                 StartCoroutine(NoticeRoutine(1));
             }
 
         }
         else
         {
-            AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
             StartCoroutine(NoticeRoutine(0));
         }
     }
@@ -268,7 +264,14 @@ public class NetworkManager : MonoBehaviour
         };
 
         SendPacket(endGamePayload, (uint)Packets.HandlerIds.EndGame);
-    }    
+    }
+
+    public void SendDisconnectPacket() 
+    {
+        DisconnectPacket disconnectPacket = new DisconnectPacket { };
+
+        SendPacket(disconnectPacket, (uint)Packets.HandlerIds.DisConnect);
+    }
 
     #endregion
 
@@ -358,7 +361,6 @@ public class NetworkManager : MonoBehaviour
 
         if (response.responseCode != 0 && !uiNotice.activeSelf)
         {
-            AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
             StartCoroutine(NoticeRoutine(2));
             return;
         }

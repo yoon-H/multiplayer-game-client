@@ -16,6 +16,7 @@ public class Packets
         JoinGame = 5,
         LocationUpdate = 6,
         EndGame = 7,
+        DisConnect = 8,
     }
 
     public static void Serialize<T>(IBufferWriter<byte> writer, T data)
@@ -115,6 +116,9 @@ public class EndGamePayload
     [ProtoMember(5, IsRequired = true)]
     public uint playerId { get; set; }
 }
+
+[ProtoContract]
+public class DisconnectPacket { }
 
 [ProtoContract]
 public class CommonPacket
