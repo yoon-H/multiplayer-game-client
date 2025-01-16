@@ -24,7 +24,7 @@ public class NetworkManager : MonoBehaviour
     private byte[] receiveBuffer = new byte[4096];
     private List<byte> incompleteData = new List<byte>();
 
-    const string IP = "127.0.0.1";
+    const string IP = "3.39.226.189";
     const string PORT = "5555";
 
     void Awake()
