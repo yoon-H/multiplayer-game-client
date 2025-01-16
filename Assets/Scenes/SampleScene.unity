@@ -12923,7 +12923,7 @@ MonoBehaviour:
   gameId: 
   score: 0
   pool: {fileID: 1572847318}
-  networkManager: {fileID: 0}
+  networkManager: {fileID: 1131302436}
   roomManager: {fileID: 1488820905}
   player: {fileID: 1729806269}
   hud: {fileID: 2138311659}
