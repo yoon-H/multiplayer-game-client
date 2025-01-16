@@ -53,8 +53,6 @@ public class NetworkManager : MonoBehaviour
                 }
             }
 
-            //GameManager.instance.deviceId = deviceIdInputField.text;
-
             if (ConnectToServer(ip, portNumber))
             {
                 StartGame();

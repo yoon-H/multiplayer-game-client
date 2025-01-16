@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public GameObject hud;
     public GameObject GameStartUI;
     public GameObject Lobby;
+    public Tiles Tiles;
 
     void Awake() {
         instance = this;
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
         NetworkManager.instance.SendGetGameSessionsPacket();
 
         player.gameObject.SetActive(false);
+        Tiles.ResetTiles();
         hud.SetActive(false);
         Lobby.SetActive(true);
         isLive = false;
@@ -91,7 +93,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameQuit() {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 
     void Update()
