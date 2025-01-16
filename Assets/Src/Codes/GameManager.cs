@@ -61,8 +61,6 @@ public class GameManager : MonoBehaviour
         hud.SetActive(false);
         Lobby.SetActive(true);
         isLive = false;
-
-        AudioManager.instance.PlayBgm(false);
     }
 
     public void GameStart() {
@@ -71,9 +69,6 @@ public class GameManager : MonoBehaviour
         hud.SetActive(true);
         Lobby.SetActive(false);
         isLive = true;
-
-        AudioManager.instance.PlayBgm(true);
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
     }
 
     public void GameOver() {
@@ -83,9 +78,6 @@ public class GameManager : MonoBehaviour
     IEnumerator GameOverRoutine() {
         isLive = false;
         yield return new WaitForSeconds(0.5f);
-
-        AudioManager.instance.PlayBgm(true);
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Lose);
     }
 
     public void GameRetry() {
