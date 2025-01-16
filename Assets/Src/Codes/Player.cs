@@ -51,9 +51,8 @@ public class Player : MonoBehaviour
         inputVec.y = Input.GetAxisRaw("Vertical");
 
         // 위치 이동 패킷 전송 -> 서버로
-        NetworkManager.instance.SendLocationUpdatePacket(rigid.position.x, rigid.position.y);
+        NetworkManager.instance.SendLocationUpdatePacket(inputVec.x, inputVec.y);
     }
-
 
     void FixedUpdate() {
         if (!GameManager.instance.isLive) {
@@ -65,12 +64,6 @@ public class Player : MonoBehaviour
             // 서버로부터 받은 위치로 이동
             rigid.MovePosition(targetPosition);
             isTargetPositionSet = false; // 목표 위치로 이동 후 상태 초기화
-        }
-        else
-        {
-            // 입력에 따른 이동
-            Vector2 nextVec = inputVec * speed * Time.fixedDeltaTime;
-            rigid.MovePosition(rigid.position + nextVec);
         }
     }
 

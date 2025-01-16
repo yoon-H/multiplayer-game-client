@@ -239,6 +239,7 @@ public class NetworkManager : MonoBehaviour
         {
             timeStamp = timestamp,
             playerId = GameManager.instance.playerId,
+            speed = GameManager.instance.player.speed,
         };
 
         SendPacket(createGamePayload, (uint)Packets.HandlerIds.CreateGame);
@@ -250,6 +251,7 @@ public class NetworkManager : MonoBehaviour
         {
             gameId = gameId,
             playerId = GameManager.instance.playerId,
+            speed = GameManager.instance.player.speed,
         };
 
         SendPacket(joinGamePayload, (uint)Packets.HandlerIds.JoinGame);
@@ -271,13 +273,13 @@ public class NetworkManager : MonoBehaviour
 
     #endregion
 
-    public void SendLocationUpdatePacket(float x, float y)
+    public void SendLocationUpdatePacket(float dx, float dy)
     {
         LocationUpdatePayload locationUpdatePayload = new LocationUpdatePayload
         {
             gameId = GameManager.instance.gameId,
-            x = x,
-            y = y,
+            dx = dx,
+            dy = dy,
         };
 
         SendPacket(locationUpdatePayload, (uint)Packets.HandlerIds.LocationUpdate);

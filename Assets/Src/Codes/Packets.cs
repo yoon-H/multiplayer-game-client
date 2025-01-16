@@ -79,6 +79,9 @@ public class CreateGamePayload
 
     [ProtoMember(2, IsRequired = true)]
     public uint playerId { get; set; }
+
+    [ProtoMember(3, IsRequired = true)]
+    public float speed { get; set; }
 }
 
 [ProtoContract]
@@ -89,6 +92,9 @@ public class JoinGamePayload
 
     [ProtoMember(2, IsRequired = true)]
     public uint playerId { get; set; }
+
+    [ProtoMember(3, IsRequired = true)]
+    public float speed { get; set; }
 }
 
 [ProtoContract]
@@ -131,9 +137,10 @@ public class LocationUpdatePayload {
     [ProtoMember(1, IsRequired = true)]
     public string gameId { get; set; }
     [ProtoMember(2, IsRequired = true)]
-    public float x { get; set; }
+    public float dx { get; set; }
     [ProtoMember(3, IsRequired = true)]
-    public float y { get; set; }
+    public float dy { get; set; }
+
 }
 
 [ProtoContract]
