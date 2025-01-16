@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameQuit() {
+
+        networkManager.SendDisconnectPacket();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
