@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         inputVec.y = Input.GetAxisRaw("Vertical");
 
         // 위치 이동 패킷 전송 -> 서버로
-        NetworkManager.instance.SendLocationUpdatePacket(inputVec.x, inputVec.y);
+        GameManager.instance.networkManager.SendLocationUpdatePacket(inputVec.x, inputVec.y);
     }
 
     void FixedUpdate() {
@@ -94,12 +94,13 @@ public class Player : MonoBehaviour
 
     public void ExitGame()
     {
-        NetworkManager.instance.SendEndGamePacket(rigid.position.x, rigid.position.y);
+        GameManager.instance.networkManager.SendEndGamePacket(rigid.position.x, rigid.position.y);
     }
 
     private void OnApplicationQuit()
     {
         GameManager.instance.isLive = false;
-        ExitGame();
+        Debug.Log("Quit");
+        GameManager.instance.networkManager.SendDisconnectPacket();
     }
 }
